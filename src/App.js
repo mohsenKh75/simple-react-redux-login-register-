@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
+import { history } from "./helpers";
+import { Nav, PrivateRoute } from "./compoents";
+import { Home } from "./home";
+import { Login } from "./login";
+
+export { App };
 
 function App() {
+  // init custom history object to allow navigation from
+  // anywhere in the react app (inside or outside components)
+  history.navigate = useNavigate();
+  history.location = useLocation();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container bg-light">
+      <Nav />
+      <div className="container pt-4 pb-4">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
     </div>
   );
 }
-
-export default App;
