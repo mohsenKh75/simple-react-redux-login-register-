@@ -20,6 +20,8 @@ function fakeBackend() {
         switch (true) {
           case url.endsWith("/users/authenticate") && opts.method === "POST":
             return authenticate();
+          case url.endsWith("/users/register") && opts.method === "POST":
+            return register();
           case url.endsWith("/users") && opts.method === "GET":
             return getUsers();
           default:
@@ -47,6 +49,28 @@ function fakeBackend() {
           lastName: user.lastName,
           token: "fake-jwt-token",
         });
+      }
+
+      function register() {
+        const { username, password, firstName, lastName } = body();
+
+        if (!username || !password || !firstName || !lastName)
+          return error("Data is not correct!");
+
+        if (users.find((item) => item.username === username))
+          return error("This userName already exist!");
+
+        users.push({
+          username,
+          password,
+          firstName,
+          lastName,
+          id: users.length,
+          token: "fake-jwt-token",
+        });
+
+        // Return last item in the users that has been created just now
+        return ok(users[users.length - 1]);
       }
 
       function getUsers() {

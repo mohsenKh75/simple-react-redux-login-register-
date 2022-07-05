@@ -10,6 +10,7 @@ import { history } from "./helpers";
 import { Nav, PrivateRoute } from "./compoents";
 import { Home } from "./home";
 import { Login } from "./login";
+import Register from "./register";
 
 export { App };
 
@@ -33,6 +34,7 @@ function App() {
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
