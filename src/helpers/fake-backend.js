@@ -65,7 +65,7 @@ function fakeBackend() {
           password,
           firstName,
           lastName,
-          id: users.length,
+          id: users.length + 1,
           token: "fake-jwt-token",
         });
 

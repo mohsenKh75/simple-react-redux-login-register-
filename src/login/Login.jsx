@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { NavLink } from "react-router-dom";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -85,6 +86,9 @@ function Login() {
           </form>
         </div>
       </div>
+      <NavLink to="/register" className="nav-item nav-link">
+        register
+      </NavLink>
     </div>
   );
 }
