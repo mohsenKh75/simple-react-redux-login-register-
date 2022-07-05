@@ -33,6 +33,7 @@ function createExtraActions() {
   const baseUrl = `${process.env.REACT_APP_API_URL}/users`;
   return {
     login: login(),
+    register: register(),
   };
 
   function login() {
@@ -45,15 +46,52 @@ function createExtraActions() {
         })
     );
   }
+
+  function register() {
+    return createAsyncThunk(
+      `${name}/register`,
+      async ({ username, password, firstName, lastName }) =>
+        await fetchWrapper.post(`${baseUrl}/register`, {
+          username,
+          password,
+          firstName,
+          lastName,
+        })
+    );
+  }
 }
 
 function createExtraReducers() {
   return {
     ...login(),
+    ...register(),
   };
 
   function login() {
     var { pending, fulfilled, rejected } = extraActions.login;
+    return {
+      [pending]: (state) => {
+        state.error = null;
+      },
+      [fulfilled]: (state, action) => {
+        const user = action.payload;
+
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem("user", JSON.stringify(user));
+        state.user = user;
+
+        // get return url from location state or default to home page
+        const { from } = history.location.state || { from: { pathname: "/" } };
+        history.navigate(from);
+      },
+      [rejected]: (state, action) => {
+        state.error = action.error;
+      },
+    };
+  }
+
+  function register() {
+    var { pending, fulfilled, rejected } = extraActions.register;
     return {
       [pending]: (state) => {
         state.error = null;
